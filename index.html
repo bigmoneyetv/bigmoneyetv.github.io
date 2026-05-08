@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Valorant Boost Calculator</title>
+<title>Solo Boosting</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -18,25 +18,23 @@
 
 body{
     font-family:'Orbitron', sans-serif;
-    background:#0b0b12;
-    overflow:hidden;
+    background:#05070d;
     color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
+    overflow-x:hidden;
 }
 
 /* Animated Background */
 
-.bg{
-    position:absolute;
+body::before{
+    content:'';
+    position:fixed;
     width:200%;
     height:200%;
     background:
-    radial-gradient(circle at center, rgba(255,70,85,.15), transparent 30%),
-    radial-gradient(circle at top left, rgba(0,255,170,.08), transparent 25%);
-    animation:bgMove 10s linear infinite;
+    radial-gradient(circle,#6a00ff22 0%, transparent 20%),
+    radial-gradient(circle,#00d9ff11 0%, transparent 25%);
+    animation:bgMove 12s linear infinite;
+    z-index:-1;
 }
 
 @keyframes bgMove{
@@ -45,68 +43,109 @@ body{
     100%{transform:translate(0,0);}
 }
 
-/* Main Card */
+/* Navbar */
 
-.container{
-    position:relative;
-    width:420px;
-    padding:35px;
-    border-radius:25px;
-    background:rgba(20,20,30,.92);
+nav{
+    width:100%;
+    padding:20px 10%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#0c1018cc;
     backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:
-    0 0 25px rgba(255,70,85,.25),
-    0 0 80px rgba(255,70,85,.08);
-    animation:fadeUp 1s ease;
-    z-index:2;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    position:sticky;
+    top:0;
+    z-index:100;
 }
 
-@keyframes fadeUp{
+.logo{
+    font-size:28px;
+    font-weight:700;
+    color:#9d5cff;
+    text-shadow:0 0 12px #9d5cff88;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:#9d5cff;
+}
+
+/* Hero */
+
+.hero{
+    text-align:center;
+    padding:100px 20px 60px;
+}
+
+.hero h1{
+    font-size:60px;
+    color:#9d5cff;
+    text-shadow:0 0 20px #9d5cff66;
+    animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
     from{
-        opacity:0;
-        transform:translateY(40px);
+        text-shadow:0 0 10px #9d5cff66;
     }
     to{
-        opacity:1;
-        transform:translateY(0);
+        text-shadow:0 0 30px #9d5cff;
     }
 }
 
-h1{
+.hero p{
+    margin-top:20px;
+    color:#bbb;
+    font-size:18px;
+}
+
+/* Calculator */
+
+.container{
+    max-width:500px;
+    margin:40px auto;
+    background:#111725;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:25px;
+    padding:35px;
+    box-shadow:0 0 35px rgba(157,92,255,.18);
+}
+
+.container h2{
     text-align:center;
     margin-bottom:25px;
-    color:#ff4655;
-    font-size:32px;
-    letter-spacing:2px;
-    text-shadow:0 0 10px rgba(255,70,85,.6);
+    color:#9d5cff;
 }
 
 label{
     display:block;
-    margin-top:15px;
+    margin-top:18px;
     margin-bottom:8px;
     color:#ccc;
-    font-size:13px;
 }
 
 select,input{
     width:100%;
     padding:14px;
     border:none;
-    outline:none;
     border-radius:12px;
-    background:#12121a;
+    background:#1a2233;
     color:white;
     font-size:15px;
-    transition:.25s;
-    border:1px solid transparent;
+    outline:none;
+    transition:.3s;
 }
 
 select:focus,
 input:focus{
-    border:1px solid #ff4655;
-    box-shadow:0 0 12px rgba(255,70,85,.5);
+    box-shadow:0 0 15px #9d5cff55;
 }
 
 /* Button */
@@ -121,51 +160,83 @@ button{
     font-weight:bold;
     cursor:pointer;
     color:white;
-    background:linear-gradient(90deg,#ff4655,#ff1f68);
-    transition:.25s;
-    position:relative;
-    overflow:hidden;
+    background:linear-gradient(90deg,#7b2cff,#9d5cff);
+    transition:.3s;
 }
 
 button:hover{
     transform:scale(1.03);
-    box-shadow:0 0 20px rgba(255,70,85,.5);
-}
-
-button::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:-100%;
-    width:100%;
-    height:100%;
-    background:rgba(255,255,255,.15);
-    transform:skewX(-20deg);
-}
-
-button:hover::before{
-    left:120%;
-    transition:1s;
+    box-shadow:0 0 25px #9d5cff88;
 }
 
 /* Result */
 
 .result{
-    margin-top:30px;
     text-align:center;
-    animation:fade .5s ease;
+    margin-top:30px;
 }
 
 .price{
-    font-size:48px;
-    color:#00ffae;
-    text-shadow:0 0 12px rgba(0,255,174,.5);
+    font-size:52px;
+    color:#00ffd0;
+    text-shadow:0 0 15px #00ffd088;
 }
 
 .eta{
     margin-top:10px;
-    color:#999;
-    font-size:13px;
+    color:#bbb;
+}
+
+/* Vouches */
+
+.vouches{
+    max-width:900px;
+    margin:100px auto;
+    padding:20px;
+}
+
+.vouches h2{
+    text-align:center;
+    color:#9d5cff;
+    margin-bottom:40px;
+    font-size:42px;
+}
+
+.vouch-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.vouch{
+    background:#111725;
+    padding:25px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.08);
+    transition:.3s;
+}
+
+.vouch:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 20px rgba(157,92,255,.25);
+}
+
+.vouch h3{
+    color:#00ffd0;
+    margin-bottom:10px;
+}
+
+.vouch p{
+    color:#ccc;
+    line-height:1.6;
+}
+
+/* Footer */
+
+footer{
+    text-align:center;
+    padding:40px;
+    color:#777;
 }
 
 </style>
@@ -173,23 +244,40 @@ button:hover::before{
 
 <body>
 
-<div class="bg"></div>
+<nav>
+    <div class="logo">SOLO BOOSTING</div>
 
-<div class="container">
+    <div class="nav-links">
+        <a href="#calculator">Calculator</a>
+        <a href="#vouches">Vouches</a>
+    </div>
+</nav>
 
-    <h1>BOOST CALCULATOR</h1>
+<section class="hero">
+
+    <h1>SOLO LEVELING BOOSTING</h1>
+
+    <p>
+        Fast • Professional • High Win Rate • NA Only
+    </p>
+
+</section>
+
+<section class="container" id="calculator">
+
+    <h2>BOOST CALCULATOR</h2>
 
     <label>Current Rank</label>
     <select id="currentRank"></select>
 
     <label>Current RR</label>
-    <input type="number" id="currentRR" min="0" max="99" value="0">
+    <input type="number" id="currentRR" value="0" min="0" max="99">
 
     <label>Desired Rank</label>
     <select id="desiredRank"></select>
 
     <label>Desired RR</label>
-    <input type="number" id="desiredRR" min="0" max="99" value="0">
+    <input type="number" id="desiredRR" value="0" min="0" max="99">
 
     <button onclick="calculatePrice()">CALCULATE PRICE</button>
 
@@ -198,7 +286,53 @@ button:hover::before{
         <div class="eta" id="eta">Estimated Time: --</div>
     </div>
 
-</div>
+</section>
+
+<section class="vouches" id="vouches">
+
+    <h2>CLIENT VOUCHES</h2>
+
+    <div class="vouch-grid">
+
+        <div class="vouch">
+            <h3>★★★★★</h3>
+            <p>
+                Super fast and extremely good communication.
+                Went from Gold 2 to Plat 3 in under 2 days.
+            </p>
+        </div>
+
+        <div class="vouch">
+            <h3>★★★★★</h3>
+            <p>
+                Smooth boosting experience and consistent wins.
+                Definitely ordering again.
+            </p>
+        </div>
+
+        <div class="vouch">
+            <h3>★★★★★</h3>
+            <p>
+                Very professional and updated me constantly.
+                Worth every dollar.
+            </p>
+        </div>
+
+        <div class="vouch">
+            <h3>★★★★★</h3>
+            <p>
+                Insane gameplay and very quick completion time.
+                Highly recommended.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    SOLO BOOSTING © 2026
+</footer>
 
 <script>
 
@@ -212,10 +346,14 @@ const ranks = [
 "Immortal 1","Immortal 2","Immortal 3"
 ];
 
-const currentSelect = document.getElementById("currentRank");
-const desiredSelect = document.getElementById("desiredRank");
+const currentSelect =
+document.getElementById("currentRank");
+
+const desiredSelect =
+document.getElementById("desiredRank");
 
 ranks.forEach((rank,index)=>{
+
     let option1 = document.createElement("option");
     option1.value = index * 100;
     option1.text = rank;
@@ -225,64 +363,80 @@ ranks.forEach((rank,index)=>{
     option2.value = index * 100;
     option2.text = rank;
     desiredSelect.appendChild(option2);
+
 });
 
 function calculatePrice(){
 
     let currentRank =
-        parseInt(currentSelect.value);
+    parseInt(currentSelect.value);
 
     let currentRR =
-        parseInt(document.getElementById("currentRR").value);
+    parseInt(document.getElementById("currentRR").value);
 
     let desiredRank =
-        parseInt(desiredSelect.value);
+    parseInt(desiredSelect.value);
 
     let desiredRR =
-        parseInt(document.getElementById("desiredRR").value);
+    parseInt(document.getElementById("desiredRR").value);
 
-    let currentTotal = currentRank + currentRR;
-    let desiredTotal = desiredRank + desiredRR;
+    let currentTotal =
+    currentRank + currentRR;
 
-    let difference = desiredTotal - currentTotal;
+    let desiredTotal =
+    desiredRank + desiredRR;
+
+    let difference =
+    desiredTotal - currentTotal;
 
     if(difference <= 0){
-        document.getElementById("price").innerHTML =
-        "INVALID";
-        document.getElementById("eta").innerHTML =
+
+        document.getElementById("price")
+        .innerHTML = "INVALID";
+
+        document.getElementById("eta")
+        .innerHTML =
         "Desired rank must be higher";
+
         return;
     }
 
-    let pricePer100RR = 4;
+    let pricePer100RR = 5;
 
     if(desiredRank >= 900){
-        pricePer100RR = 6;
+        pricePer100RR = 7;
     }
 
     if(desiredRank >= 1200){
-        pricePer100RR = 8;
+        pricePer100RR = 10;
     }
 
     if(desiredRank >= 1500){
-        pricePer100RR = 12;
+        pricePer100RR = 14;
     }
 
     if(desiredRank >= 1800){
-        pricePer100RR = 18;
+        pricePer100RR = 20;
     }
 
     let finalPrice =
-        Math.round((difference / 100) * pricePer100RR);
+    Math.round((difference / 100) * pricePer100RR);
 
-    let estimatedHours =
-        Math.ceil(difference / 180);
+    // 3 ranks = 1 day
+    let ranksDifference =
+    difference / 100;
 
-    document.getElementById("price").innerHTML =
-    "$" + finalPrice;
+    let estimatedDays =
+    Math.ceil(ranksDifference / 3);
 
-    document.getElementById("eta").innerHTML =
-    "Estimated Time: " + estimatedHours + " Hours";
+    document.getElementById("price")
+    .innerHTML = "$" + finalPrice;
+
+    document.getElementById("eta")
+    .innerHTML =
+    "Estimated Time: " +
+    estimatedDays +
+    " Day(s)";
 }
 
 </script>
