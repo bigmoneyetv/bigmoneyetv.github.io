@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Valorant Boost Calculator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Orbitron', sans-serif;
+    background:#0b0b12;
+    overflow:hidden;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+/* Animated Background */
+
+.bg{
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:
+    radial-gradient(circle at center, rgba(255,70,85,.15), transparent 30%),
+    radial-gradient(circle at top left, rgba(0,255,170,.08), transparent 25%);
+    animation:bgMove 10s linear infinite;
+}
+
+@keyframes bgMove{
+    0%{transform:translate(0,0);}
+    50%{transform:translate(-5%,-5%);}
+    100%{transform:translate(0,0);}
+}
+
+/* Main Card */
+
+.container{
+    position:relative;
+    width:420px;
+    padding:35px;
+    border-radius:25px;
+    background:rgba(20,20,30,.92);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:
+    0 0 25px rgba(255,70,85,.25),
+    0 0 80px rgba(255,70,85,.08);
+    animation:fadeUp 1s ease;
+    z-index:2;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+h1{
+    text-align:center;
+    margin-bottom:25px;
+    color:#ff4655;
+    font-size:32px;
+    letter-spacing:2px;
+    text-shadow:0 0 10px rgba(255,70,85,.6);
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:8px;
+    color:#ccc;
+    font-size:13px;
+}
+
+select,input{
+    width:100%;
+    padding:14px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:#12121a;
+    color:white;
+    font-size:15px;
+    transition:.25s;
+    border:1px solid transparent;
+}
+
+select:focus,
+input:focus{
+    border:1px solid #ff4655;
+    box-shadow:0 0 12px rgba(255,70,85,.5);
+}
+
+/* Button */
+
+button{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(90deg,#ff4655,#ff1f68);
+    transition:.25s;
+    position:relative;
+    overflow:hidden;
+}
+
+button:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 20px rgba(255,70,85,.5);
+}
+
+button::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,.15);
+    transform:skewX(-20deg);
+}
+
+button:hover::before{
+    left:120%;
+    transition:1s;
+}
+
+/* Result */
+
+.result{
+    margin-top:30px;
+    text-align:center;
+    animation:fade .5s ease;
+}
+
+.price{
+    font-size:48px;
+    color:#00ffae;
+    text-shadow:0 0 12px rgba(0,255,174,.5);
+}
+
+.eta{
+    margin-top:10px;
+    color:#999;
+    font-size:13px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="container">
+
+    <h1>BOOST CALCULATOR</h1>
+
+    <label>Current Rank</label>
+    <select id="currentRank"></select>
+
+    <label>Current RR</label>
+    <input type="number" id="currentRR" min="0" max="99" value="0">
+
+    <label>Desired Rank</label>
+    <select id="desiredRank"></select>
+
+    <label>Desired RR</label>
+    <input type="number" id="desiredRR" min="0" max="99" value="0">
+
+    <button onclick="calculatePrice()">CALCULATE PRICE</button>
+
+    <div class="result">
+        <div class="price" id="price">$0</div>
+        <div class="eta" id="eta">Estimated Time: --</div>
+    </div>
+
+</div>
+
+<script>
+
+const ranks = [
+"Bronze 1","Bronze 2","Bronze 3",
+"Silver 1","Silver 2","Silver 3",
+"Gold 1","Gold 2","Gold 3",
+"Platinum 1","Platinum 2","Platinum 3",
+"Diamond 1","Diamond 2","Diamond 3",
+"Ascendant 1","Ascendant 2","Ascendant 3",
+"Immortal 1","Immortal 2","Immortal 3"
+];
+
+const currentSelect = document.getElementById("currentRank");
+const desiredSelect = document.getElementById("desiredRank");
+
+ranks.forEach((rank,index)=>{
+    let option1 = document.createElement("option");
+    option1.value = index * 100;
+    option1.text = rank;
+    currentSelect.appendChild(option1);
+
+    let option2 = document.createElement("option");
+    option2.value = index * 100;
+    option2.text = rank;
+    desiredSelect.appendChild(option2);
+});
+
+function calculatePrice(){
+
+    let currentRank =
+        parseInt(currentSelect.value);
+
+    let currentRR =
+        parseInt(document.getElementById("currentRR").value);
+
+    let desiredRank =
+        parseInt(desiredSelect.value);
+
+    let desiredRR =
+        parseInt(document.getElementById("desiredRR").value);
+
+    let currentTotal = currentRank + currentRR;
+    let desiredTotal = desiredRank + desiredRR;
+
+    let difference = desiredTotal - currentTotal;
+
+    if(difference <= 0){
+        document.getElementById("price").innerHTML =
+        "INVALID";
+        document.getElementById("eta").innerHTML =
+        "Desired rank must be higher";
+        return;
+    }
+
+    let pricePer100RR = 4;
+
+    if(desiredRank >= 900){
+        pricePer100RR = 6;
+    }
+
+    if(desiredRank >= 1200){
+        pricePer100RR = 8;
+    }
+
+    if(desiredRank >= 1500){
+        pricePer100RR = 12;
+    }
+
+    if(desiredRank >= 1800){
+        pricePer100RR = 18;
+    }
+
+    let finalPrice =
+        Math.round((difference / 100) * pricePer100RR);
+
+    let estimatedHours =
+        Math.ceil(difference / 180);
+
+    document.getElementById("price").innerHTML =
+    "$" + finalPrice;
+
+    document.getElementById("eta").innerHTML =
+    "Estimated Time: " + estimatedHours + " Hours";
+}
+
+</script>
+
+</body>
+</html>
